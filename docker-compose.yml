@@ -19,7 +19,7 @@ services:
     ports:
       - "8081:8081"
     volumes:
-       - "${DATA_DIR}:/dojofiles:consistent"
+       - dojofiles
     networks:
        - portal
     environment:

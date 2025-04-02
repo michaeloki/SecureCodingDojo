@@ -13,7 +13,7 @@
 <script>
     var app = angular.module("localLoginApp", []);
     app.controller("localLoginCtrl", function($scope, $http) {
-      
+
       $scope.refresh = function(id) {
         var img = document.getElementById(id);
         img.src = '';
@@ -29,43 +29,43 @@
         newUser.captcha = captcha.value.trim();
 
         //verifications
-        $scope.isError = false;    
-        $scope.isSuccess = false;    
-        $scope.registerErrorMessage = "";  
+        $scope.isError = false;
+        $scope.isSuccess = false;
+        $scope.registerErrorMessage = "";
         if(newUser.username === ""){
-          $scope.isError = true;    
+          $scope.isError = true;
           $scope.registerErrorMessage += "User name cannot be empty. ";
         }
 
         if(newUser.password === ""){
-          $scope.isError = true;    
+          $scope.isError = true;
           $scope.registerErrorMessage += "Password cannot be empty. ";
         }
 
         if(newUser.password !== vfyPassword.value){
-          $scope.isError = true;    
+          $scope.isError = true;
           $scope.registerErrorMessage += "Verification password doesn't match. ";
         }
 
         if(newUser.givenName === ""){
-          $scope.isError = true;    
+          $scope.isError = true;
           $scope.registerErrorMessage += "Given name cannot be empty. ";
         }
 
         if(newUser.familyName === ""){
-          $scope.isError = true;    
+          $scope.isError = true;
           $scope.registerErrorMessage += "Family name cannot be empty. ";
         }
 
         if(newUser.captcha === ""){
-          $scope.isError = true;    
+          $scope.isError = true;
           $scope.registerErrorMessage += "Captcha cannot be empty. ";
         }
 
         if($scope.isError){
           return;
         }
-        
+
         //client checks are fine proceed with the server checks
         $http.post("/public/register",{newUser:newUser})
           .then(function(response) {
@@ -84,7 +84,7 @@
           },function(errorResponse){
               $scope.isError = true;
               $scope.registerErrorMessage = "A http error has occurred.";
-              
+
           });
 
      }
@@ -100,15 +100,15 @@
 
 
 <div id="container" class="container">
-    
+
   <form action="/public/locallogin" method="POST">
     <div class="form-group">
       <label for="username">User name:</label>
-      <input type="username" class="form-control" id="username" name="username">
+      <input type="username" class="form-control" id="username" name="username" placeholder="It must be alphanumric ">
     </div>
     <div class="form-group">
       <label for="password">Password:</label>
-      <input type="password" class="form-control" id="password" name="password" autocomplete="off">
+      <input type="password" class="form-control" id="password" name="password" autocomplete="off" placeholder="16 characters long">
     </div>
     <div class="form-group">
         <label for="captchaImg">Captcha image:</label>
@@ -121,7 +121,7 @@
         <label for="captcha">Captcha value:</label>
         <input type="captcha" class="form-control" id="loginCaptcha" name="loginCaptcha">
     </div>
-    
+
     <button type="submit" class="btn btn-primary">Submit</button>
     <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#registerModal">Register</button>
   </form>
@@ -138,11 +138,11 @@
                 <span aria-hidden="true">&times;</span>
               </button>
         </div>
-        <div class="modal-body">      
+        <div class="modal-body">
             <div class="alert alert-success" id="registerSuccessMessage" ng-if="isSuccess">
                 Registration successful.
             </div>
-            
+
             <div class="alert alert-danger" id="registerErrorMessage" ng-if="isError">
                 {{registerErrorMessage}}
             </div>
@@ -174,7 +174,7 @@
                     <span class="oi oi-reload" ng-click="refresh('captchaImg')"></span>
                  </a>
             </div>
-            
+
             <div class="form-group">
                 <label for="captcha">Captcha value:</label>
                 <input type="captcha" class="form-control" id="captcha" name="captcha">

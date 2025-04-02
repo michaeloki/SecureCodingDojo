@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   trainingportal:
-    image: securecodingdojo/trainingportal
+    image: securecodingdojo/trainingportal1
     deploy:
       resources:
         limits:

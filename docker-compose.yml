@@ -1,26 +1,6 @@
 version: "3.7"
 
 services:
-  insecureinc:
-    image: securecodingdojo/insecure.inc
-    deploy:
-      resources:
-        limits:
-          cpus: "0.3"
-          memory: 256M
-        reservations:
-          cpus: "0.3"
-          memory: 256M
-    build:
-      context: ./insecureinc
-      dockerfile: Dockerfile.insecureinc
-    restart: "always" #change to always if you want the image to auto start
-    ports:
-      - "8080:8080"
-    networks:
-      - insecure
-    environment:
-       - CHALLENGE_MASTER_SALT
 
   trainingportal:
     image: securecodingdojo/trainingportal
@@ -48,77 +28,8 @@ services:
        - ENC_KEY_IV
        - DATA_DIR=/dojofiles
 
-  host1:
-    image: securecodingdojo/hackerden-host1
-    deploy:
-      resources:
-        limits:
-          cpus: "0.1"
-          memory: 128M
-        reservations:
-          cpus: "0.1"
-          memory: 128M
-    build:
-      context: ./hackerden
-      dockerfile: Dockerfile.host1
-    restart: "always" 
-    expose:
-      - "22"
-    networks:
-      hden:
-        aliases:
-          - host1
-
-  host2:
-    image: securecodingdojo/hackerden-host2
-    deploy:
-      resources:
-        limits:
-          cpus: "0.1"
-          memory: 128M
-        reservations:
-          cpus: "0.1"
-          memory: 128M
-    build:
-      context: ./hackerden
-      dockerfile: Dockerfile.host2
-    restart: "always"
-    expose:
-      - "8080"
-    networks:
-      hden:
-        aliases:
-          - host2
-
-  front:
-    image: securecodingdojo/hackerden-front
-    deploy:
-      resources:
-        limits:
-          cpus: "0.2"
-          memory: 128M
-        reservations:
-          cpus: "0.2"
-          memory: 128M
-    build:
-      context: ./hackerden
-      dockerfile: Dockerfile.front
-    restart: "always" 
-    ports:
-      - "3000:3000"
-    environment:
-       - CHALLENGE_MASTER_SALT
-       - COINMINER_SSH_HOST=host1
-       - COMMAND_PROC_URL=http://host2:8080/commandproc
-    networks:
-      hden:
-        aliases:
-          - front
-
 volumes:
   dojofiles:
 
 networks:
   portal:
-  insecure:
-  hden:

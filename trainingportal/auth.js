@@ -14,17 +14,6 @@ const captchapng = require('captchapng');
 const fs = require('fs');
 
 
-
-
-if(!util.isNullOrUndefined(config.samlProviderCertFilePath)){
-    var samlProviderCert = fs.readFileSync(path.join(__dirname, config.samlProviderCertFilePath), 'utf-8');
-} 
-if(!util.isNullOrUndefined(config.encSamlProviderPvkFilePath)){
-    var encSamlProviderPvk = fs.readFileSync(path.join(__dirname, config.encSamlProviderPvkFilePath), 'utf-8');
-    var samlProviderPvk = aesCrypto.decrypt(encSamlProviderPvk);
-} 
-
-
 var localUsers = null;
 var localUsersPath = "";
 try{
@@ -32,7 +21,7 @@ try{
   {
     let dataDir = util.getDataDir();
     localUsersPath = path.join(dataDir, config.localUsersPath);
-    
+
     if(!fs.existsSync(localUsersPath)){
         //create the users file if not already there
         fs.writeFileSync(localUsersPath, "{}", 'utf8');
@@ -54,27 +43,23 @@ try{
 catch(ex){/*Do nothing*/}
 
 
-var GoogleStrategy = require('passport-google-oauth20').Strategy;
-var SlackStrategy = require('passport-slack-oauth2').Strategy;
 var LocalStrategy = require('passport-local').Strategy;
-var SamlStrategy = require('passport-saml').Strategy;
-var LdapStrategy = require('passport-ldapauth').Strategy;
 
 let isAuthenticated = function (req){
     return !util.isNullOrUndefined(req) && !util.isNullOrUndefined(req.user) && !util.isNullOrUndefined(req.user.id) && req.isAuthenticated();
 }
 
 let getCaptcha = function(req,res){
-    
+
       var val = parseInt(Math.random()*9000+1000);
-      
-      var p = new captchapng(80,30,val); // width,height,numeric captcha 
+
+      var p = new captchapng(80,30,val); // width,height,numeric captcha
       req.session.captcha=val.toString();
       req.session.save();
-    
-      p.color(0, 0, 0, 0);  
-      p.color(80, 80, 80, 255); 
-    
+
+      p.color(0, 0, 0, 0);
+      p.color(80, 80, 80, 255);
+
       var img = p.getBase64();
       var imgbase64 = new Buffer.from(img, 'Base64');
       res.writeHead(200, {
@@ -86,11 +71,11 @@ let getCaptcha = function(req,res){
 
 let isValidCaptcha = function(req,captcha){
     var vfyCatpcha = req.session.captcha;
-    
-    //clear the captcha 
+
+    //clear the captcha
     req.session.captcha = uid.sync(6);
     req.session.save();
-    
+
     if(util.isNullOrUndefined(captcha) || vfyCatpcha !== captcha){
         return false;
     }
@@ -114,14 +99,14 @@ let checkCaptchaOnLogin = function(req,res,next){
 
 /**
  * Registers a user in the local directory
- * 
+ *
  */
 let registerLocalUser = function(req,res){
     //check if local auth is enabled
     if(localUsers == null){
         return util.apiResponse(req, res, 400, "Local authentication is not enabled");
     }
-    
+
     var newUser = req.body.newUser;
 
     if(util.isNullOrUndefined(newUser)){
@@ -137,7 +122,7 @@ let registerLocalUser = function(req,res){
     }
 
     var password = newUser.password;
-    
+
     if(util.isNullOrUndefined(password)){
         return util.apiResponse(req, res, 400, "Invalid request. 'password' not defined.");
     }
@@ -159,7 +144,7 @@ let registerLocalUser = function(req,res){
     var localUser = {"givenName":givenName,"familyName":familyName};
 
     createUpdateUser(req, res, username, localUser, password);
-    
+
 };
 
 
@@ -175,7 +160,7 @@ let createUpdateUserInternal = (username, localUser, password) => {
 };
 
 let createUpdateUser = function(req, res, username, localUser, password){
-    
+
     var isStrongPass = validator.matches(password,/.{16,}/)==true &&
     validator.matches(password,/[a-z]/)==true;
 
@@ -184,16 +169,16 @@ let createUpdateUser = function(req, res, username, localUser, password){
     }
 
     createUpdateUserInternal(username, localUser, password);
-  
+
     return util.apiResponse(req, res, 200, "User created/modified.");
 };
 
 
 let verifyLocalUserPassword = function(username,password){
     if(localUsers === null){
-        util.log("Local authentication is not configured"); 
+        util.log("Local authentication is not configured");
         return null;
-   } 
+   }
 
    if(username in localUsers){
         var user = localUsers[username];
@@ -242,13 +227,13 @@ let updateLocalUser = function(req,res){
     }
 
     var curPassword = profileInfo.curPassword;
-    
+
     if(util.isNullOrUndefined(curPassword)){
         return util.apiResponse(req, res, 400, "Invalid request. 'curPassword' not defined.");
     }
 
     var newPassword = profileInfo.newPassword;
-    
+
     if(util.isNullOrUndefined(newPassword)){
         return util.apiResponse(req, res, 400, "Invalid request. 'newPassword' not defined.");
     }
@@ -303,8 +288,8 @@ let processAuthCallback = async(profileId, givenName, familyName, email, cb) => 
 
             //create a new user profile in the database
             user = {
-                accountId: profileId, 
-                familyName: familyName, 
+                accountId: profileId,
+                familyName: familyName,
                 givenName: givenName,
                 teamId: teamId,
                 level:0
@@ -320,8 +305,9 @@ let processAuthCallback = async(profileId, givenName, familyName, email, cb) => 
             }
         }
         if(cb) return cb(null, user);
-        
+
     } catch (error) {
+        console.log('see this error here ....', error);
         util.log(error);
         cb(error, null);
     }
@@ -334,7 +320,7 @@ let getLocalStrategy = function () {
         if(user!==null){
             return processAuthCallback("Local_"+username, user.givenName, user.familyName, null, cb);
         }
-        
+
         return cb(null,false);
 
     });
@@ -354,7 +340,7 @@ let getLdapStrategy = function () {
             server: config.ldapServer
         },
     (user, cb) => {
-    
+
         if(user!==null){
             var splitName = user.name.split(" ");
             var givenName = "";
@@ -367,7 +353,7 @@ let getLdapStrategy = function () {
 
             return processAuthCallback("LDAP_"+user.cn, givenName, familyName, email, cb);
         }
-        
+
         return cb(null,false);
 
     });
@@ -405,14 +391,14 @@ let getSamlStrategy = function () {
         identifierFormat: null
       }, (user, cb) => {
             if(user!==null){
-               
+
                 var givenName = user[config.samlGivenName];
                 var familyName = user[config.samlFamilyName];
                 var email = user[config.samlEmail];
 
                 return processAuthCallback("SAML_"+email, givenName, familyName, email, cb);
             }
-            
+
             return cb(null,false);
     });
 }
@@ -435,8 +421,8 @@ let getSlackStrategy = function () {
             var email = profile.user.email;
             if(profile.team.id !== config.slackTeamId){
             util.log("Invalid team id");
-            return cb();  
-            } 
+            return cb();
+            }
 
             if(splitName.length >= 1) givenName = splitName[0];
             if(splitName.length >= 2) familyName = splitName[1];
@@ -460,8 +446,8 @@ let getPassport = function (){
     if("localUsersPath" in config) passport.use(getLocalStrategy());
     if("ldapServer" in config) passport.use(getLdapStrategy());
 
-    
-    if("samlCert" in config){ 
+
+    if("samlCert" in config){
         var samlStrategy = getSamlStrategy();
         if(config.samlLogProviderMetadata){
             console.log(samlStrategy.generateServiceProviderMetadata(samlProviderCert));
@@ -483,13 +469,13 @@ let getPassport = function (){
 //Returns a session object
 let getSession = function () {
     var ses = session(
-    { 
+    {
         proxy:true,
-        secret: uid.sync(64), 
-        resave:false, 
+        secret: uid.sync(64),
+        resave:false,
         saveUninitialized:false,
         maxAge: Date.now() + 1000 * 60 * 60 * 2, //2 hours session timeout
-        cookie: {secure:config.dojoUrl.startsWith("https")} 
+        cookie: {secure:config.dojoUrl.startsWith("https")}
     });
 
     return ses;
@@ -500,8 +486,8 @@ let getSession = function () {
 
 //test authentication
 let ensureAuthSkipXsrfCheck = function (req, res, next) {
-    if (isAuthenticated(req)) { 
-      next(); 
+    if (isAuthenticated(req)) {
+      next();
     }
     else{
         if(typeof req.session !== 'undefined' && req.session){
@@ -530,14 +516,14 @@ let addCsrfToken = function (req, responseBody){
 
 let authenticationByDefault = function (req, res, next) {
     //the root folder and the public folder are the only ones excluded from authentication
-    if (req.path === "/" || req.path.indexOf('/public') === 0 || req.path.indexOf('/favicon.ico') === 0 ){ 
+    if (req.path === "/" || req.path.indexOf('/public') === 0 || req.path.indexOf('/favicon.ico') === 0 ){
         next();
     }
-    else if(req.path.indexOf('/api') === 0){ 
+    else if(req.path.indexOf('/api') === 0){
         //api auth is stronger and has XSRF protection
         ensureApiAuth(req,res,next);
     }
-    else{ 
+    else{
         //everything else uses cookie authentication
         ensureAuthSkipXsrfCheck(req,res,next);
     }
@@ -551,7 +537,7 @@ let ensureApiAuth = function (req, res, next) {
   if(isAuth){
     return next();
   }
-  
+
   util.apiResponse(req, res,401,"Unauthorized");
 
 }
@@ -563,7 +549,7 @@ let logoutAndKillSession = (req, res, redirect) => {
         req.session.destroy(() => {
             res.redirect(redirect);
         });
-    }); 
+    });
 }
 
 //logout
@@ -577,13 +563,13 @@ let addSecurityHeaders = function (req, res, next) {
         res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
         res.header('Expires', '-1');
         res.header('Pragma', 'no-cache');
-           
+
     }
     res.header('Content-Security-Policy', "script-src 'self' 'unsafe-inline' 'unsafe-eval';");
     res.header('X-Frame-Options', 'SAMEORIGIN');
     res.header('X-XSS-Protection', '1');
     res.header('Strict-Transport-Security', 'max-age=31536000');
-    res.header('X-Content-Type-Options', 'nosniff'); 
+    res.header('X-Content-Type-Options', 'nosniff');
 
     next();
 }

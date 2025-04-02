@@ -1,20 +1,30 @@
+require('dotenv').config();
 var crypto = require('crypto');
-var util = require('util');
 
-function getEncParams(keySeed,ivSeed){
+require('dotenv').config({ path: __dirname + '/.env' });
+
+
+
+
+function getEncParams(keySeed,ivSeed) {
     var myKeySeed = keySeed;
     var myIvSeed = ivSeed;
-    if(util.isNullOrUndefined(myKeySeed) || util.isNullOrUndefined(myIvSeed)){
-       var myKeySeed = process.env.ENC_KEY;
-       var myIvSeed = process.env.ENC_KEY_IV;
+    var cryptkey = "";
+    var iv = "";
+
+    if((myKeySeed === undefined || myKeySeed === null) || (myIvSeed === undefined || myIvSeed === null) ) {
+        myKeySeed = process.env.ENC_KEY;
+        myIvSeed = process.env.ENC_KEY_IV;
     }
-    var cryptkey = crypto.createHash('sha256').update(myKeySeed).digest();
-    var iv = crypto.createHash('sha256').update(myIvSeed).digest().slice(0,16);
+
+    cryptkey = crypto.createHash('sha256').update(myKeySeed).digest();
+    iv = crypto.createHash('sha256').update(myIvSeed).digest().slice(0,16);
 
     return {key:cryptkey, iv:iv};
 }
 
 exports.decrypt = function(encryptdata, keySeed, ivSeed) {
+    //console.log(`in decrypt - I got encryptdata, keySeed ivSeed `+ keySeed + ivSeed + encryptdata);
     var keyParams = getEncParams(keySeed,ivSeed);
     encryptdata = Buffer.from(encryptdata, 'base64').toString('binary');
     var decipher = crypto.createDecipheriv('aes-256-cbc', keyParams.key, keyParams.iv);
@@ -24,8 +34,8 @@ exports.decrypt = function(encryptdata, keySeed, ivSeed) {
 }
 
 exports.encrypt = function(cleardata, keySeed, ivSeed) {
+    // console.log(`in encrypt - I got keySeed `+ keySeed + ivSeed + cleardata);
     var keyParams = getEncParams(keySeed,ivSeed);
-
     var encipher = crypto.createCipheriv('aes-256-cbc', keyParams.key, keyParams.iv);
     var encryptdata  = encipher.update(cleardata, 'utf8', 'binary');
 

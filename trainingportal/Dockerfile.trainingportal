@@ -10,10 +10,11 @@ RUN apk upgrade
 
 
 ADD public /home/node/app/public/
-ADD static /home/node/app/static/ 
-ADD sql /home/node/app/sql/ 
+ADD static /home/node/app/static/
+ADD sql /home/node/app/sql/
 
 COPY *.js /home/node/app/
+COPY *.env /home/node/app/
 COPY package.json /home/node/app/
 COPY config.json.docker /home/node/app/config.json
 

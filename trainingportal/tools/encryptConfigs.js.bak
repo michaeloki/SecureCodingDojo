@@ -4,7 +4,7 @@ const util = require(path.join(__dirname, '../util'));
 require('dotenv').config();
 
 // temporarily write your passwords here, cleanup after generating the encrypted settings
-var dbPass = "sj8747474";
+var dbPass = "sjfh8YRFHF33";
 //DELETE ME WHEN DONE
 
 

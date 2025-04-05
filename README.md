@@ -51,45 +51,21 @@ Training portal
 - node/npm (developed with v10)
 - OPTIONAL: MySQL server + My SQL Workbench (developed with MySQL 5.7)
 
-Insecure.Inc
-- Developed in Java EE
-- Eclipse Java EE latest version (developed with Neon) + Java 1.8 + tomcat 8 for the Insecure.Inc training app
 
 # Development Environment Setup Instructions
 Training portal 
 - More details on the [wiki](https://github.com/OWASP/SecureCodingDojo/wiki/Development-Setup-for-Training-Portal)
 
-Insecure.inc 
-- More details on the [wiki](https://github.com/OWASP/SecureCodingDojo/wiki/Development-Setup-for-Insecure.Inc)
 
 # Building
 Training portal
 - Run the ./buildTrainingPortal.sh script. It will build a docker image and a AWS Elastic Beanstalk package
 
-Insecure.Inc 
-- Right click on the project to export as a .war file and drop it into the /webapps folder of your Tomcat 8 installation.
-
-
-# Hosting Insecure.Inc
-
-Check out the [wiki](https://github.com/OWASP/SecureCodingDojo/wiki/Running-Insecure.Inc).
 
 # Deploying the Training Portal 
 
 More info on the [wiki](https://github.com/OWASP/SecureCodingDojo/wiki/Running-the-training-portal).
 
-# Slack Setup Instructions
-You will need to create a Slack app for authentication.
-- Go to https://api.slack.com/
-- Hit Start Building and follow the prompts to create a Slack App in your Development Slack Team
-- Once your app is created you will be able to get your App Credentials to configure your config.json
-- Configure redirect urls under OAuth & Permissions. For example for a localhost setup the redirect url would be: http://localhost:8081/public/slack/callback
-
-
-# Google Setup Instructions
-Google authentication can also be configured in config.json. You will need a Google developer account and obtain the OAuth credentials from the Google API console: https://console.developers.google.com
-
-In the same place you will setup your domain and authorized redirect URIs. For example for a localhost setup the redirect url would be: http://localhost:8081/public/google/callback
 
 # Local Authentication Setup Instructions
 For small teams or pre-configured images Slack or Google authentication may not be an option. For this scenario you can configure authentication working with a local flat file.
@@ -102,9 +78,7 @@ Check the wiki for more information.
 
 # DB Setup Instructions
 
-If you don't configure a DB the training portal will just use a local SQLite DB
-
-You can also install MySQL and create a DB and credentials for that DB. Note your user name and password you will need them for later.
+Install MySQL and create a DB and credentials for that DB. Note your user name and password you will need them for later.
 
 # Encryption Key Seeds and Environment Variables
 You will have to setup encryption keys as OS environment variables. On *nix/mac modify .bash_profile as follows

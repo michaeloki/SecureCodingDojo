@@ -17,7 +17,14 @@
 
     "disabledModules":["redTeam","blueTeam"],
 
+    "dbHost" : "",
+    "dbName" : "",
+    "dbUser" : "",
+    "encDbPass" : "",
 
+
+    "allowedAccountPattern" : "",
+    "allowedAccounts" : "",
     "localUsersPath" : "localUsers.json",
 
     "enableProjectFooter" : true

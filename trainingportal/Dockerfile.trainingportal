@@ -27,7 +27,7 @@ ADD sql /home/node/app/sql/
 # COPY server.key /home/node/app/
 
 COPY *.js /home/node/app/
-COPY *.env /home/node/app/
+COPY .env /home/node/app/
 COPY package.json /home/node/app/
 COPY config.json /home/node/app/config.json
 

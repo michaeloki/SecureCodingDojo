@@ -4,17 +4,22 @@
 
 
 
-# === cd trainingportal/sql/
+#cd trainingportal/sql/
 
 
-#touch .env
-#touch config.json
+
 #generate random 16-character strings and append them to ENC_KEY, ENC_KEY_IV and CHALLENGE_MASTER_SALT
-RANDOM_STRING=$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 10 | head -n 1)
-echo $RANDOM_STRING
+# RANDOM_ENC_KEY=$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 16 | head -n 1)
+# echo $RANDOM_STRING
 
+# export ENC_KEY=$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 16 | head -n 1)
+# export ENC_KEY_IV=$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 16 | head -n 1)
+# export CHALLENGE_MASTER_SALT=$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 16 | head -n 1)
 
-# touch trainingportal/touch .env
+touch trainingportal/.env
+echo export ENC_KEY=$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 16 | head -n 1) > trainingportal/.env
+echo export ENC_KEY_IV=$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 16 | head -n 1) >> trainingportal/.env
+echo export CHALLENGE_MASTER_SALT=$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 16 | head -n 1) >> trainingportal/.env
 # touch trainingportal/config.json
 # cat trainingportal/config.json.docker >> trainingportal/config.json
 # cp trainingportal/config.json ~/dojofiles/

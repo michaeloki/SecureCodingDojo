@@ -6,21 +6,24 @@ const aesCrypto = require(path.join(__dirname, 'aescrypto'));
 const mysql = require('mysql2');
 var sqlite3 = null;
 const fs = require('fs');
+require('dotenv').config();
 
 var MYSQL_CONFIG = null;
 var liteDB = null;
 
-if(util.isNullOrUndefined(config.dbHost)){
-  sqlite3 = require('sqlite3');
 
-  //use sqlite instead of mysql
-  var dbPath = "";
-  var dbFileName = "securecodingdojo.db";
-  var dataDir = util.getDataDir();
-  dbPath = path.join(dataDir, dbFileName);
-  liteDB = new sqlite3.Database(dbPath);
-}
-else {
+console.log("config.dbHost is ", config.dbHost);
+// if(util.isNullOrUndefined(config.dbHost)){
+//   sqlite3 = require('sqlite3');
+
+//   //use sqlite instead of mysql
+//   var dbPath = "";
+//   var dbFileName = "securecodingdojo.db";
+//   var dataDir = util.getDataDir();
+//   dbPath = path.join(dataDir, dbFileName);
+//   liteDB = new sqlite3.Database(dbPath);
+// }
+// else {
   MYSQL_CONFIG = {
     connectionLimit:100,
     host: config.dbHost,
@@ -29,7 +32,7 @@ else {
     password: aesCrypto.decrypt(config.encDbPass),
     multipleStatements:true
   };
-}
+//}
 
 class Connection{
   
@@ -172,8 +175,9 @@ let init = async () => {
     dbSetup = "sql/dbsetup.mysql.sql";
   }
   else{
-    sql = "SELECT count(*) as count FROM sqlite_master WHERE type='table' AND name = 'users'";
-    dbSetup = "sql/dbsetup.sqlite.sql";
+    // sql = "SELECT count(*) as count FROM sqlite_master WHERE type='table' AND name = 'users'";
+    // dbSetup = "sql/dbsetup.sqlite.sql";
+    console.log('MYSQL is missing...');
   }
 
   var error = null;

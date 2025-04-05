@@ -4,7 +4,7 @@ const util = require(path.join(__dirname, '../util'));
 require('dotenv').config();
 
 // temporarily write your passwords here, cleanup after generating the encrypted settings
-var dbPass="AS3dtQLmpXqNWuGJ";//DELETE ME WHEN DONE
+var dbPass="";//DELETE ME WHEN DONE
 
 
 var config = util.getConfig();

@@ -1,5 +1,5 @@
 #!/bin/bash
-//edit dockerfile.trainingportal - use config.json 
+//edit Dockerfile.trainingportal - use config.json 
 // ensure mysql accepts connections from all IPs
 cd trainingportal/sql/
 //touch .env

@@ -24,11 +24,11 @@ const fs = require('fs');
 const app = express();
 const uid = require('uid-safe');
 const validator = require('validator');
-const https = require('https');
-const options = {
-  key: fs.readFileSync('your_server_key.key'),
-  cert: fs.readFileSync('your_server_crt.crt')
-}
+// const https = require('https');
+// const options = {
+//   key: fs.readFileSync('your_server_key.key'),
+//   cert: fs.readFileSync('your_server_crt.crt')
+// }
 
 const db = require(path.join(__dirname, 'db'));
 db.initSync();
@@ -615,12 +615,12 @@ process.on('SIGINT', function() {
   process.exit();
 });
 
-// app.listen(8081,function(){
-//     util.log('Listening on 8081');
-//     util.log('Configured url:'+config.dojoUrl);
-//     util.log('Is secure:'+config.dojoUrl.startsWith("https")); 
-// });
+app.listen(8081,function(){
+    util.log('Listening on 8081');
+    util.log('Configured url:'+config.dojoUrl);
+    util.log('Is secure:'+config.dojoUrl.startsWith("https")); 
+});
 
-https.createServer(options, app).listen(443, () => {
-  console.log('Server is listening on 443');
-})
+// https.createServer(options, app).listen(443, () => {
+//   console.log('Server is listening on 443');
+// })

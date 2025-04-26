@@ -1,6 +1,26 @@
 version: "3.7"
 
 services:
+  insecureinc:
+    image: securecodingdojo/insecure.inc
+    deploy:
+      resources:
+        limits:
+          cpus: "0.3"
+          memory: 256M
+        reservations:
+          cpus: "0.3"
+          memory: 256M
+    build:
+      context: ./insecureinc
+      dockerfile: Dockerfile.insecureinc
+    restart: "always" #change to always if you want the image to auto start
+    ports:
+      - "8080:8080"
+    networks:
+      - insecure
+    environment:
+      - CHALLENGE_MASTER_SALT
 
   trainingportal:
     image: securecodingdojo/trainingportal

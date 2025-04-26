@@ -23,7 +23,7 @@ services:
       - CHALLENGE_MASTER_SALT
 
   trainingportal:
-    image: securecodingdojo/trainingportal
+    image: securitylab
     deploy:
       resources:
         limits:
@@ -37,9 +37,9 @@ services:
       context: ./trainingportal
       dockerfile: Dockerfile.trainingportal
     ports:
-      - "8081:8081"
+      - "443:443" # You could use 8080:8080 if SSL is disabled
     volumes:
-       - dojofiles
+       - /dojofiles
     networks:
        - portal
     environment:

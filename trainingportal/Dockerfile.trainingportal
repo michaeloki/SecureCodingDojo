@@ -13,10 +13,23 @@ ADD public /home/node/app/public/
 ADD static /home/node/app/static/
 ADD sql /home/node/app/sql/
 
+# COPY server.crt /etc/ssl/certs/
+# COPY server.key /etc/ssl/private/
+
+# # Set the certificate file permissions
+# RUN chmod 600 /etc/ssl/private/server.key
+
+# # Set the environment variable for the certificate file
+# ENV SSL_CERT_FILE=/etc/ssl/certs/server.crt
+# ENV SSL_KEY_FILE=/etc/ssl/private/server.key
+
+# COPY server.crt /home/node/app/
+# COPY server.key /home/node/app/
+
 COPY *.js /home/node/app/
-COPY *.env /home/node/app/
+COPY .env /home/node/app/
 COPY package.json /home/node/app/
-COPY config.json.docker /home/node/app/config.json
+COPY config.json /home/node/app/config.json
 
 WORKDIR /home/node/app
 

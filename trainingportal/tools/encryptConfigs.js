@@ -4,33 +4,35 @@ const util = require(path.join(__dirname, '../util'));
 require('dotenv').config();
 
 // temporarily write your passwords here, cleanup after generating the encrypted settings
-var dbPass="";//DELETE ME WHEN DONE
+var dbPass = "sj8747474";
+//DELETE ME WHEN DONE
 
 
-var config = util.getConfig();
-const fs = require('fs');
+//var config = util.getConfig();
 
-console.log("======= config.json ========== ");
+
+console.log("======= config.json is ========== "+ dbPass);
 
 //You can use the following script from  when you update your key to a new value
-console.log(`"encDbPass": "${aescrypto.encrypt(dbPass)}",`);
-
+// console.log(`"encDbPass": "${aescrypto.encrypt(dbPass)}"`);
+var encryptedPass = aescrypto.encrypt(dbPass);
+console.log(`"encDbPass": "${encryptedPass}"`);
 
 /**
  * Use this function to generate the properties for a local user
  */
 
- const crypto = require('crypto');
+//  constvctrc6
 
- function genLocalUser(username, givenName, familyName, password){
+//  function genLocalUser(username, givenName, familyName, password){
 
-     var saltString = crypto.randomBytes(16).toString('base64').toString();
-     var passwordHash = util.hashPassword(password,saltString);
+//      var saltString = crypto.randomBytes(16).toString('base64').toString();
+//      var passwordHash = util.hashPassword(password,saltString);
 
-     var user = {"givenName":givenName,"familyName":familyName,"passHash":passwordHash,"passSalt":saltString};
-     console.log(username+":"+JSON.stringify(user));
- }
+//      var user = {"givenName":givenName,"familyName":familyName,"passHash":passwordHash,"passSalt":saltString};
+//      console.log(username+":"+JSON.stringify(user));
+//  }
 
- genLocalUser("samsung","Darwin","Nunez","mobile");//DELETE ME WHEN DONE
+//  genLocalUser("samsung","Darwin","Nunez","mobile");//DELETE ME WHEN DONE
 
 

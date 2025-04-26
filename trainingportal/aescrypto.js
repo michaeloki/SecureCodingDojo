@@ -1,8 +1,8 @@
-require('dotenv').config();
+
 var crypto = require('crypto');
 
+//require('dotenv').config({ path: __dirname + '/.env' });
 require('dotenv').config({ path: __dirname + '/.env' });
-
 
 
 
@@ -24,7 +24,7 @@ function getEncParams(keySeed,ivSeed) {
 }
 
 exports.decrypt = function(encryptdata, keySeed, ivSeed) {
-    //console.log(`in decrypt - I got encryptdata, keySeed ivSeed `+ keySeed + ivSeed + encryptdata);
+    // console.log(`in decrypt - I got encryptdata, keySeed ivSeed `+ keySeed + ivSeed + encryptdata);
     var keyParams = getEncParams(keySeed,ivSeed);
     encryptdata = Buffer.from(encryptdata, 'base64').toString('binary');
     var decipher = crypto.createDecipheriv('aes-256-cbc', keyParams.key, keyParams.iv);

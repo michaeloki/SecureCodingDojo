@@ -1,1 +1,0 @@
-<a href="ping.php">Network diagnostics</a>

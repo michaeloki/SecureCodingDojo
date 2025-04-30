@@ -1,0 +1,7 @@
+<Connector port="8443" protocol="HTTP/1.1" SSLEnabled="true">
+    <SSLHostConfig>
+        <Certificate certificateKeyStoreFile="conf/self-signed.crt"
+                     certificateKeyFile="conf/self-signed.key"
+                     type="RSA"/>
+    </SSLHostConfig>
+</Connector>

@@ -20,6 +20,7 @@ touch trainingportal/.env
 echo export ENC_KEY=$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 16 | head -n 1) > trainingportal/.env
 echo export ENC_KEY_IV=$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 16 | head -n 1) >> trainingportal/.env
 echo export CHALLENGE_MASTER_SALT=$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 16 | head -n 1) >> trainingportal/.env
+echo export CHALLENGE_MASTER_SALT=$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 16 | head -n 1) > insecureinc/.env
 # touch trainingportal/config.json
 # cat trainingportal/config.json.docker >> trainingportal/config.json
 # cp trainingportal/config.json ~/dojofiles/
